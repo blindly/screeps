@@ -1,6 +1,7 @@
 function generateBody(energy) {
     var numberOfParts = Math.floor(energy / 200);
     var body = [];
+    body.push(TOUGH);
     for (let i = 0; i < numberOfParts; i++) {
         body.push(WORK);
     }
@@ -14,7 +15,7 @@ function generateBody(energy) {
     return body;
 }
 
-var autocreate = {
+var dispatcher = {
 
     /** @param {Game} Game **/
     /** @param {allowCreepCreation} allowCreepCreation **/
@@ -25,19 +26,19 @@ var autocreate = {
             name: 'harvester',
             group: 'harvesters',
             priority: 1,
-            max: 10,
+            max: 6,
             count: _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester').length
         }, {
             name: 'upgrader',
             group: 'upgraders',
             priority: 2,
-            max: 7,
+            max: 5,
             count: _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader').length
         }, {
             name: 'builder',
             group: 'builders',
             priority: 3,
-            max: 5,
+            max: 4,
             count: _.filter(Game.creeps, (creep) => creep.memory.role == 'builder').length
         }];
 
@@ -57,15 +58,16 @@ var autocreate = {
                                 role: myRole.name,
                                 working: false,
                             });
-
-                            //console.log('Welcome new ' + myRole.name + ': ' + newName);
-
+                            console.log('[' + myRole.name + "] [count: " + myRole.count + " max: " + myRole.max + "] +1" );
+                            // created a new creep
                             break;
                         } else {
-                            console.log('Would have created ' + myRole.name + " - c: " + myRole.count + "| m: " + myRole.max);
+                            console.log('[', myRole.name, "] count: ", myRole.count, " max: ", myRole.max, "] ?", myRole.max - myRole.count );
+                            // Will Create when I have Energy Available
                         }
                     } else {
-                        console.log('Not creating ' + myRole.name + " - c: " + myRole.count + "| m: " + myRole.max);
+                        console.log('[' + myRole.name + "] c: " + myRole.count + " m: " + myRole.max, "]");
+                        // Not Creating
                     }
                 }
             }
@@ -73,4 +75,4 @@ var autocreate = {
     }
 };
 
-module.exports = autocreate;
+module.exports = dispatcher;
